@@ -60,7 +60,7 @@ def from_html(n, html):
         if url and url not in pics: pics.append(url)
     color = ''
     text = soup.get_text(' ',strip=True)
-    m = re.search(r'Color/Finish\\s+(.{6,100}?)\\s+(?:Variant|Product variants|Quantity|Sold out)',text)
+    m = re.search(r'Color/Finish\s+(.{6,100}?)\s+(?:Variant|Product variants|Quantity|Sold out)',text)
     if m: color = m.group(1).strip()
     return {'number':n,'name':color or heading.split('|')[0],'title':'One-Off Fat Herbie',
         'url':f'{BASE}/products/{handle}','images':pics,'price':None,
@@ -100,7 +100,7 @@ def collect_catalogs():
                     rows = response.json().get('products',[])
                     if not rows: break
                     for item in rows:
-                        m = re.fullmatch(r'one-off-fat-herbie-(\\d+)',item.get('handle',''))
+                        m = re.fullmatch(r'one-off-fat-herbie-(\d+)',item.get('handle',''))
                         if m:
                             number = int(m.group(1))
                             parsed = parse_product(number,item)
