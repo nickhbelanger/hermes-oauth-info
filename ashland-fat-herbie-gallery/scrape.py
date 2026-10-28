@@ -12,7 +12,7 @@ from urllib3.util.retry import Retry
 
 BASE = 'https://ashlandleather.com'
 DEST = Path(__file__).with_name('data.json')
-LIMIT = 227
+LIMIT = 260
 
 def session():
     s = requests.Session()
@@ -40,7 +40,7 @@ def parse_product(n, obj):
         url = image_url(value)
         if url and url not in pics: pics.append(url)
     price = variant.get('price')
-    try: price = round(float(price)/100,2) if price is not None else None
+    try: price = round((float(price) if isinstance(price,str) and '.' in price else float(price)/100),2) if price is not None else None
     except (ValueError,TypeError): price = None
     return {'number':n,'name':name,'title':obj.get('title','One-Off Fat Herbie'),
         'url':f'{BASE}/products/{handle}','images':pics,'price':price,
@@ -84,6 +84,35 @@ def collect(n):
         return n,None,type(e).__name__+': '+str(e)[:90]
     finally: s.close()
 
+def collect_catalogs():
+    """Collect still-public older one-offs through Shopify collection feeds."""
+    out = {}
+    s = session()
+    try:
+        for coll in ('fat-herbie','limited-releases-sold-out'):
+            for page in range(1,9):
+                url = f'{BASE}/collections/{coll}/products.json?limit=250&page={page}'
+                try:
+                    response = s.get(url,timeout=25)
+                    if not response.ok:
+                        print(f'Collection {coll} page {page}: HTTP {response.status_code}',flush=True)
+                        break
+                    rows = response.json().get('products',[])
+                    if not rows: break
+                    for item in rows:
+                        m = re.fullmatch(r'one-off-fat-herbie-(\\d+)',item.get('handle',''))
+                        if m:
+                            number = int(m.group(1))
+                            parsed = parse_product(number,item)
+                            if parsed and parsed['images']: out[number] = parsed
+                    if len(rows)<250: break
+                except Exception as exc:
+                    print(f'Collection {coll} page {page}: {type(exc).__name__}: {exc}',flush=True)
+                    break
+    finally: s.close()
+    print(f'Catalog discovery: {len(out)} numbered one-offs',flush=True)
+    return out
+
 def main():
     old = {}
     if DEST.exists():
@@ -91,16 +120,21 @@ def main():
         except Exception: pass
     products,missing,errors={},[],{}
     with ThreadPoolExecutor(max_workers=3) as pool:
-        futures = [pool.submit(collect,n) for n in range(1,LIMIT+1)]
+        futures = [pool.submit(collect,n) for n in range(180,LIMIT+1)]
         for future in as_completed(futures):
             n,p,error=future.result()
             if p: products[n]=p
-            elif error=='missing': missing.append(n)
+            elif error=='missing':
+                missing.append(n)
+                if n in old: products[n]=old[n]
             else:
                 errors[str(n)]=error
                 if n in old: products[n]=old[n]
             if (len(products)+len(missing)+len(errors)) % 30 == 0:
                 print(f'Checked {len(products)+len(missing)+len(errors)}/{LIMIT}, archived {len(products)}',flush=True)
+    for n,p in collect_catalogs().items():
+        if n not in products or len(p['images']) > len(products[n]['images']):
+            products[n] = p
     if not products:
         print('No products returned; refusing to overwrite good archive.',file=sys.stderr)
         sys.exit(1)
