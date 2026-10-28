@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Privacy policy for the private Hermes Personal workflow that copies a local SQLite database to the owner's Google Sheet.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Privacy policy · Hermes Personal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="wrap">
+    <a class="brand" href="index.html">Hermes Personal</a>
+    <nav aria-label="Main navigation"><a href="index.html">Home</a><a aria-current="page" href="privacy.html">Privacy</a></nav>
+  </header>
+  <main id="main" class="wrap policy">
+    <p class="eyebrow">Effective 28 October 2026</p>
+    <h1>Privacy policy</h1>
+    <p class="lead">For the private, owner-operated Google Sheets workflow within the Hermes Personal project.</p>
+    <section aria-labelledby="scope">
+      <h2 id="scope">What this policy covers</h2>
+      <p>This policy covers a single-owner workflow that maintains a Google Sheet as a redundant copy of a locally running SQLite database, using deterministic writes on a schedule. It does not describe other Hermes functionality or integrations.</p>
+      <p>The workflow is for personal use, not a public service. There are no public registrations.</p>
+    </section>
+    <section aria-labelledby="data">
+      <h2 id="data">Data access and use</h2>
+      <p>The workflow uses Google Sheets access authorized by the owner to read and write spreadsheet data for this copying process. Requested permissions are presented during Google's authorization process; access depends on the permissions the owner grants.</p>
+      <p>The source database runs locally. Scheduled writes send data to the owner's Google Sheet, where the redundant copy is stored. This workflow does not send spreadsheet data to an AI or model provider for processing.</p>
+    </section>
+    <section aria-labelledby="retention">
+      <h2 id="retention">Retention and deletion</h2>
+      <p>The owner manages retention of the local SQLite source and the Google Sheets copy. No fixed automatic deletion period is specified for this personal workflow.</p>
+      <p>To stop scheduled copying, the owner can disable the workflow. To remove retained data, the owner must manage deletion separately in the local database and in Google Sheets, including any copies or backups the owner has made.</p>
+    </section>
+    <section aria-labelledby="access">
+      <h2 id="access">Revoking Google access</h2>
+      <p>The owner can revoke access through their Google Account's linked-app settings. Revoking access stops future access through that permission grant; it does not automatically delete data already stored locally or in the Google Sheet. See <a href="https://support.google.com/accounts/answer/14012355">Google's guidance on linked-app access</a>.</p>
+    </section>
+    <section aria-labelledby="site">
+      <h2 id="site">This informational website</h2>
+      <p>These static pages contain no database contents, spreadsheet contents, credentials, or application backend. They do not provide a sign-in flow or collect information through forms. The site code includes no analytics, advertising, tracking scripts, or cookies.</p>
+      <p>When these pages are served by GitHub Pages, GitHub records and retains visitors' IP addresses for security, including visits made without signing in to GitHub. See <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection">GitHub Pages data collection</a> and the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>.</p>
+      <p>GitHub Pages hosts this informational content, not the local database or the Google Sheets integration.</p>
+    </section>
+    <section aria-labelledby="contact">
+      <h2 id="contact">Contact</h2>
+      <p>For questions about this integration, use the support contact shown on its Google authorization consent screen.</p>
+    </section>
+    <section aria-labelledby="changes">
+      <h2 id="changes">Changes to this policy</h2>
+      <p>If this workflow's data practices change, this policy will be updated to describe them. The effective date appears at the top of this page.</p>
+    </section>
+  </main>
+  <footer class="wrap"><span>Hermes Personal</span><a href="index.html">Home</a></footer>
+</body>
+</html>
